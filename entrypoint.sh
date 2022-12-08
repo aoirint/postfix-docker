@@ -12,10 +12,16 @@ fi
 
 if [ -f /postfix/vmailbox ]; then
   cp /postfix/vmailbox /etc/postfix/vmailbox
+  postmap /etc/postfix/vmailbox
 fi
 
 if [ -f /postfix/virtual ]; then
   cp /postfix/virtual /etc/postfix/virtual
+  postmap /etc/postfix/virtual
+fi
+
+if [ -f /postfix/vdomains ]; then
+  cp /postfix/vdomains /etc/postfix/vdomains
 fi
 
 exec "$@"
