@@ -5,6 +5,8 @@ ARG DEBIAN_FRONTEND=noninteractive
 ARG POSTFIX_VERSION=3.6.4-1ubuntu1.1
 
 RUN <<EOF
+  set -eu
+
   apt-get update
 
   apt-get install -y \
