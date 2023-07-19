@@ -34,4 +34,9 @@ if [ -f /postfix/access ]; then
   postmap /etc/postfix/access
 fi
 
+# Copy resolv.conf to postfix chroot environment
+if [ -f /etc/resolv.conf ]; then
+  cp /etc/resolv.conf /var/spool/postfix/etc/resolv.conf
+fi
+
 exec "$@"
