@@ -2,7 +2,7 @@
 FROM ubuntu:22.04
 
 ARG DEBIAN_FRONTEND=noninteractive
-ARG POSTFIX_VERSION=3.6.4-0ubuntu1
+ARG POSTFIX_VERSION=3.6.4-1ubuntu1.1
 
 RUN <<EOF
   apt-get update
