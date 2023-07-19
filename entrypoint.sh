@@ -24,4 +24,9 @@ if [ -f /postfix/vdomains ]; then
   cp /postfix/vdomains /etc/postfix/vdomains
 fi
 
+if [ -f /postfix/aliases ]; then
+  cp /postfix/aliases /etc/postfix/aliases
+  postalias /etc/postfix/aliases
+fi
+
 exec "$@"
