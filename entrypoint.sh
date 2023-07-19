@@ -29,4 +29,9 @@ if [ -f /postfix/aliases ]; then
   postalias /etc/postfix/aliases
 fi
 
+if [ -f /postfix/access ]; then
+  cp /postfix/access /etc/postfix/access
+  postmap /etc/postfix/access
+fi
+
 exec "$@"
