@@ -10,7 +10,7 @@ on:
 
 env:
   IMAGE_NAME: aoirint/postfix
-  IMAGE_VERSION_NAME: ${{ (github.event.release.tag_name != '' && github.event.release.tag_name) || 'latest' }}
+  IMAGE_TAG: ${{ github.event.release.tag_name != '' && github.event.release.tag_name || 'latest' }}
 
 jobs:
   deploy-docker:
@@ -32,16 +32,14 @@ jobs:
       - name: Build and Deploy Docker image
         uses: docker/build-push-action@v5
         env:
-          IMAGE_NAME_AND_TAG: ${{ format('{0}:{1}', env.IMAGE_NAME, env.IMAGE_VERSION_NAME) }}
-          LATEST_IMAGE_NAME_AND_TAG: ${{ format('{0}:{1}', env.IMAGE_NAME, 'latest') }}
+          IMAGE_NAME_AND_TAG: ${{ format('{0}:{1}', env.IMAGE_NAME, env.IMAGE_TAG) }}
+          IMAGE_CACHE_FROM: ${{ format('type=registry,ref={0}:latest-buildcache', env.IMAGE_NAME) }}
+          IMAGE_CACHE_TO: ${{ env.IMAGE_TAG == 'latest' && format('type=registry,ref={0}:latest-buildcache,mode=max', env.IMAGE_NAME) || '' }}
         with:
-          builder: ${{ steps.buildx.outputs.name }}
           context: .
+          builder: ${{ steps.buildx.outputs.name }}
           file: ./Dockerfile
           push: true
           tags: ${{ env.IMAGE_NAME_AND_TAG }}
-          cache-from: |
-            type=registry,ref=${{ env.IMAGE_NAME_AND_TAG }}-buildcache
-            type=registry,ref=${{ env.LATEST_IMAGE_NAME_AND_TAG }}-buildcache
-          cache-to: |
-            type=registry,ref=${{ env.IMAGE_NAME_AND_TAG }}-buildcache,mode=max
+          cache-from: ${{ env.IMAGE_CACHE_FROM }}
+          cache-to: ${{ env.IMAGE_CACHE_TO }}
